@@ -65,9 +65,7 @@ export default function LoginPage() {
         </form>
         {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
       </div>
-
-      {/* Timer en Attempts buiten de login-container */}
-      <Timer />
+   <Timer />
       <Attempts attempts={passwordAttempts} />
     </div>
   );
