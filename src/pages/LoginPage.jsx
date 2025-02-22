@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import Timer from "../components/Timer";
 import Attempts from "../components/Attempts";
 
@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [passwordAttempts, setPasswordAttempts] = useState([]);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const checkLogin = (event) => {
     event.preventDefault();
@@ -16,7 +16,7 @@ export default function LoginPage() {
     console.log(passwordAttempts);
 
     if (username === "admin" && password === "supergeheim123") {
-      navigate("/opdracht"); 
+      navigate("/opdracht");
     } else {
       setError("Onjuiste inloggegevens");
     }
@@ -67,7 +67,7 @@ export default function LoginPage() {
         {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
       </div>
 
-      <Timer />
+      <Timer showTips={true} />
       <Attempts attempts={passwordAttempts} />
     </div>
   );
