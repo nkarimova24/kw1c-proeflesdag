@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; 
 import Timer from "../components/Timer";
 import Attempts from "../components/Attempts";
 
@@ -7,6 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [passwordAttempts, setPasswordAttempts] = useState([]);
+  const navigate = useNavigate(); 
 
   const checkLogin = (event) => {
     event.preventDefault();
@@ -14,14 +16,13 @@ export default function LoginPage() {
     console.log(passwordAttempts);
 
     if (username === "admin" && password === "supergeheim123") {
-      window.location.href = "/opdracht";
+      navigate("/opdracht"); 
     } else {
       setError("Onjuiste inloggegevens");
     }
   };
 
   useEffect(() => {
-    //verborgen hint
     const script = document.createElement("script");
     script.innerHTML = `console.log("🚀 Geheime login: admin / supergeheim123")`;
     document.body.appendChild(script);
@@ -34,7 +35,7 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-700 to-blue-500 relative">
       <div className="bg-white p-8 rounded-xl shadow-lg w-96">
-        <h2 className="text-2xl font-bold text-center mb-4">Log in</h2>
+        <h2 className="text-2xl font-bold text-center mb-4">Welkom, log in</h2>
         <form onSubmit={checkLogin}>
           <div className="mb-4">
             <label className="block text-gray-700">Gebruikersnaam</label>
@@ -65,7 +66,8 @@ export default function LoginPage() {
         </form>
         {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
       </div>
-   <Timer />
+
+      <Timer />
       <Attempts attempts={passwordAttempts} />
     </div>
   );
