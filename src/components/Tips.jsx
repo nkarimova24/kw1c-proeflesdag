@@ -1,32 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function Tips({ taskIndex, taskTip, score, setScore }) {
-  const [bought, setBought] = useState(false);
+export default function Tips({ tips, score, setScore }) {
+  const [availableTips, setAvailableTips] = useState([]); 
+  const [boughtTips, setBoughtTips] = useState([]); 
+  const tipPrices = [10, 15];
 
-  // Functie om een tip te kopen
-  const buyTip = () => {
-    if (!bought && score >= 10) {
-      setBought(true);
-      setScore(score - 10);
+  useEffect(() => {
+    if (!tips || tips.length === 0) return; 
+
+    //timers om tips beschikbaar te maken, 1e na 2 minuten, 2e na 4 minuten
+    const timers = tips.map((_, index) =>
+      setTimeout(() => {
+        setAvailableTips((prev) => [...prev, index]);
+      }, (index + 1) * 2 * 60 * 1000)
+    );
+
+    return () => timers.forEach(clearTimeout);
+  }, [tips]);
+
+  const buyTip = (index) => {
+    if (score >= tipPrices[index] && !boughtTips.includes(index)) {
+      setBoughtTips((prev) => [...prev, index]);
+      setScore((prev) => prev - tipPrices[index]);
     }
   };
 
   return (
-    <div>
-      {/* Tip kopen knop (alleen als nog niet gekocht) */}
-      {!bought && (
-        <button
-          className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-lg text-sm"
-          onClick={buyTip}
-        >
-          Koop Tip (-10 punten)
-        </button>
-      )}
+    <div className="mt-4 flex flex-col gap-2">
+      {tips.map((tip, index) => (
+        <div key={index}>
+          <button
+            className={`px-4 py-2 rounded-md text-white transition ${
+              availableTips.includes(index)
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+            onClick={() => buyTip(index)}
+            disabled={!availableTips.includes(index) || boughtTips.includes(index)}
+          >
+            {boughtTips.includes(index) ? "Tip gekocht!" : `Koop Tip ${index + 1} (${tipPrices[index]} punten)`}
+          </button>
 
-      {/* Tip tonen als gekocht */}
-      {bought && (
-        <p className="mt-2 text-sm text-yellow-600">💡 Tip: {taskTip}</p>
-      )}
+          {boughtTips.includes(index) && (
+            <p className="mt-2 text-sm text-yellow-600">💡 Tip: {tip}</p>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
