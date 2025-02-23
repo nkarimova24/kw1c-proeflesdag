@@ -93,6 +93,7 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
     }
   };
 
+  
   return (
     <div className="flex flex-col items-center min-h-screen bg-blue-950">
       <div className="w-full max-w-2xl mt-6 px-4">
@@ -121,12 +122,12 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
 
             {index !== tasks.length - 1 && (
               <>
-                {index === currentTask && (
-                  <button className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg" onClick={unlockNextTask}>
+                <div className='flex justify-between mt-4'>
+                  <button className="mt-12 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition-all duration-300" onClick={unlockNextTask}>
                     {task.buttonText}
                   </button>
-                )}
-                <Tips taskIndex={index} tips={task.tips} score={score} setScore={setScore} />
+                  <Tips taskIndex={index} tips={task.tips} score={score} setScore={setScore} />
+                </div>
               </>
             )}
           </div>
