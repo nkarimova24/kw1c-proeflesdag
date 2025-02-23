@@ -86,9 +86,9 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
     }
   };
 
+ 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gradient-to-r from-purple-700 to-blue-500">
-      
+    <div className="flex flex-col items-center min-h-screen bg-blue-950">
       <div className="w-full max-w-2xl mt-6 px-4">
         <div className="w-full bg-gray-300 rounded-full h-4">
           <div
@@ -103,8 +103,7 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
         <Score score={score} />
 
         {tasks.map((task, index) => (
-          <div key={index} className={`p-6 border rounded-lg mt-4 bg-gray-100 hover:scale-105 hover:shadow-lg transition-all duration-300 ${index > currentTask ? "hidden" : ""}`}>
-            <h3 className="text-xl font-bold text-gray-800">{task.title}</h3>
+          <div key={index} className={`p-6 border border-gray-300 rounded-lg mt-4 bg-gray-100 hover:scale-105 hover:shadow-md transition-all duration-300 ${index > currentTask ? "hidden" : ""}`}>            <h3 className="text-xl font-bold text-gray-800">{task.title}</h3>
             <p className="text-gray-700 whitespace-pre-line">{task.description}</p>
             
             {task.command && (
