@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Timer from "../components/Timer";
 import Attempts from "../components/Attempts";
 
-{/* */}
+{/* Login pagina met compoents als Timer en Attempts erin verwerkt*/}
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +24,7 @@ export default function LoginPage() {
     }
   };
 
+  {/* 'Verborgen' script, het is makkelijk te vinden in F12, zouden wel moeilijker kunnen maken door een student in Network Tab te laten kijken.*/}
   useEffect(() => {
     const script = document.createElement("script");
     script.innerHTML = `Geheime login: admin / supergeheim123`;
@@ -68,6 +70,7 @@ export default function LoginPage() {
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
 
+    {/*Timer en Attempts components worden hier aangeroepen*/}
       <Timer showTips={true} />
       <Attempts attempts={passwordAttempts} />
     </div>

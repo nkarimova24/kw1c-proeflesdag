@@ -3,10 +3,14 @@ import Timer from "../components/Timer";
 import Tips from "../components/Tips";
 import Score from "../components/Score";
 
+{/* ExercisePage met components als Timer, Tips en Score*/}
+
 export default function ExercisePage() {
-  const [score, setScore] = useState(100);
+  const [score, setScore] = useState(100); //startscore, valt aan te passen
   const [currentTask, setCurrentTask] = useState(0);
 
+  {/* Array met opdrachten, je kunt een opdrachten aanpassen of een toevoegen
+    Tips kun je zelf invullen*/}
   const tasks = [
     {
       title: "1. Vind de verborgen WiFi-netwerken",
@@ -80,6 +84,7 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
     },
   ];
 
+  {/*Functie voor het ontgrendelen van de volgende taak, scrollt ook door naar volgende taak*/}
   
   const unlockNextTask = () => {
     if (currentTask < tasks.length - 1) {
@@ -107,6 +112,7 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
 
       <div className="bg-white p-8 rounded-xl shadow-xl max-w-2xl w-full mt-6">
         <h2 className="text-3xl font-extrabold text-center text-gray-800">Netwerk & Cybersecurity Opdracht</h2>
+        {/*Score component*/}
         <Score score={score} />
 
         {tasks.map((task, index) => (
@@ -126,6 +132,7 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
                   <button className="mt-12 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition-all duration-300" onClick={unlockNextTask}>
                     {task.buttonText}
                   </button>
+                  {/*Tips component*/}
                   <Tips taskIndex={index} tips={task.tips} score={score} setScore={setScore} />
                 </div>
               </>
@@ -133,7 +140,7 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
           </div>
         ))}
       </div>
-
+        {/*Timer component*/}
       <Timer showTips={false} />
     </div>
   );

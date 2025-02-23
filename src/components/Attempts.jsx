@@ -1,3 +1,4 @@
+{/*Attempts component, om bij te houden wat student heeft ingevuld als het gaan om inloggegevens */}
 export default function Attempts({ attempts }) {
     return (
       <div className="fixed bottom-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80 max-h-60 overflow-auto">

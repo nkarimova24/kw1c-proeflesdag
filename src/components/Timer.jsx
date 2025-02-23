@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 
+{/* Timer component */}
 export default function Timer({ showTips }) {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [tips, setTips] = useState({ tip1: false, tip2: false, tip3: false });
 
+  //tips worden na een bepaalde tijd laten zien als showTips is ingeschakeld 
+  //showTips wordt gebruikt om de timer te kunnen herbruiken voor ExercisePage
+  //showTips laat dus alleen de tips zien die gepast zijn op de LoginPage
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setElapsedTime((prev) => prev + 1);
