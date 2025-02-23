@@ -80,13 +80,19 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
     },
   ];
 
+  
   const unlockNextTask = () => {
     if (currentTask < tasks.length - 1) {
-      setCurrentTask(currentTask + 1);
+      setCurrentTask((prevTask) => {
+        const nextTask = prevTask + 1;
+        setTimeout(() => {
+          document.getElementById(`task-${nextTask}`)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        return nextTask;
+      });
     }
   };
 
- 
   return (
     <div className="flex flex-col items-center min-h-screen bg-blue-950">
       <div className="w-full max-w-2xl mt-6 px-4">
@@ -103,7 +109,8 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
         <Score score={score} />
 
         {tasks.map((task, index) => (
-          <div key={index} className={`p-6 border border-gray-300 rounded-lg mt-4 bg-gray-100 hover:scale-105 hover:shadow-md transition-all duration-300 ${index > currentTask ? "hidden" : ""}`}>            <h3 className="text-xl font-bold text-gray-800">{task.title}</h3>
+          <div key={index} id={`task-${index}`} className={`p-6 border border-gray-300 rounded-lg mt-4 bg-gray-100 hover:scale-105 hover:shadow-md transition-all duration-300 ${index > currentTask ? "hidden" : ""}`}>
+            <h3 className="text-xl font-bold text-gray-800">{task.title}</h3>
             <p className="text-gray-700 whitespace-pre-line">{task.description}</p>
             
             {task.command && (
