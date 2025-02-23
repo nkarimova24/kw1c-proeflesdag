@@ -43,9 +43,9 @@ export default function Timer({ showTips }) {
 
       {showTips && (
         <div className="mt-2 space-y-2">
-          {tips.tip1 && <div className="p-2 bg-yellow-300 rounded">💡 Tip: 'admin' is een standaard inlognaam.</div>}
-          {tips.tip2 && <div className="p-2 bg-yellow-300 rounded">💡 Tip: Gebruik F12 om de ontwikkelaarstools te openen.</div>}
-          {tips.tip3 && <div className="p-2 bg-yellow-300 rounded">💡 Tip: Bekijk de broncode van de pagina om te zien hoe je kunt inloggen.</div>}
+          {tips.tip1 && <div className="p-2 bg-300 rounded">Tip: 'admin' is een standaard inlognaam.</div>}
+          {tips.tip2 && <div className="p-2 bg-300 rounded">Tip: Gebruik F12 om de ontwikkelaarstools te openen.</div>}
+          {tips.tip3 && <div className="p-2 bg-300 rounded">Tip: Bekijk de broncode van de pagina om te zien hoe je kunt inloggen.</div>}
         </div>
       )}
     </div>

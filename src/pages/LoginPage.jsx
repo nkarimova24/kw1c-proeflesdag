@@ -16,7 +16,7 @@ export default function LoginPage() {
     console.log(passwordAttempts);
 
     if (username === "admin" && password === "supergeheim123") {
-      navigate("/opdracht");
+      navigate("/material");
     } else {
       setError("Onjuiste inloggegevens");
     }
@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.innerHTML = `console.log("🚀 Geheime login: admin / supergeheim123")`;
+    script.innerHTML = `Geheime login: admin / supergeheim123`;
     document.body.appendChild(script);
 
     return () => {
