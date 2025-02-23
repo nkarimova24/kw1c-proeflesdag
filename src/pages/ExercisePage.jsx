@@ -16,6 +16,7 @@ export default function ExercisePage() {
       title: "1. Vind de verborgen WiFi-netwerken",
       description: `Je eerste taak is om te ontdekken welke verborgen WiFi-netwerken beschikbaar zijn.\n
 Gebruik het volgende commando in de terminal:`,
+//ik wist eerlijk gezegd niet zeker of de command hier een tip was of niet, zo wel, kunnen we dit veranderen naar een tip :)
       command: "sudo iwlist wlan0 scan | grep -E 'SSID|Signal'",
       buttonText: "Voltooid",
       tips: ["vul tip in", "vul tip in"],
@@ -112,7 +113,7 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
 
       <div className="bg-white p-8 rounded-xl shadow-xl max-w-2xl w-full mt-6">
         <h2 className="text-3xl font-extrabold text-center text-gray-800">Netwerk & Cybersecurity Opdracht</h2>
-        {/*Score component*/}
+        {/*Score component*/} 
         <Score score={score} />
 
         {tasks.map((task, index) => (
@@ -126,21 +127,19 @@ Als je antwoord krijgt, is de verbinding succesvol.`,
               </pre>
             )}
 
-            {index !== tasks.length - 1 && (
-              <>
-                <div className='flex justify-between mt-4'>
-                  <button className="mt-12 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition-all duration-300" onClick={unlockNextTask}>
-                    {task.buttonText}
-                  </button>
-                  {/*Tips component*/}
-                  <Tips taskIndex={index} tips={task.tips} score={score} setScore={setScore} />
-                </div>
-              </>
+            {index === currentTask && (
+              <div className='flex justify-between mt-4'>
+                <button className="mt-12 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition-all duration-300" onClick={unlockNextTask}>
+                  {task.buttonText}
+                </button>
+                {/*Tips component*/}
+                <Tips taskIndex={index} tips={task.tips} score={score} setScore={setScore} />
+              </div>
             )}
           </div>
         ))}
       </div>
-        {/*Timer component*/}
+      {/* Timer componen, showTips dat voor LoginPage gebruikt wordt staat nu uit*/}
       <Timer showTips={false} />
     </div>
   );
