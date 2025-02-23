@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const MaterialPage = () => {
+export default function MaterialPage() {
   const navigate = useNavigate();
 
   return (
@@ -20,6 +20,4 @@ const MaterialPage = () => {
       </div>
     </div>
   );
-};
-
-export default MaterialPage;
+}

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Timer from "../components/Timer";
 import Attempts from "../components/Attempts";
 
+{/* */}
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

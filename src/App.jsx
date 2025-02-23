@@ -6,6 +6,7 @@ import ExercisePage from "./pages/ExercisePage";
 function App() {
   return (
     <Router>
+      {/*defineert routes van de applicatie*/}
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/material" element={<MaterialPage />} />
