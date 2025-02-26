@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netwerk & Cybersecurity Opdracht</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen bg-blue-950 p-6">
+
+    <!-- Score -->
+    <p id="scoreDisplay" class="text-center text-lg text-gray-600 font-semibold">
+        Jouw score: <span id="scoreValue" class="text-green-600 font-bold">100</span> punten
+    </p>
+
+    <!-- Vooruitgangsbalk -->
+    <div class="w-full max-w-2xl mt-6 px-4">
+        <div class="w-full bg-gray-300 rounded-full h-4">
+            <div id="progressBar" class="bg-green-500 h-4 rounded-full transition-all duration-500" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- Opdracht Container -->
+    <div id="taskContainer" class="w-full max-w-2xl mt-6 space-y-6"></div>
+
+    <!-- Timer -->
+    <div id="timerContainer" class="fixed top-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let score = 100;
+            let currentTask = 0;
+            let availableTips = {};
+            let boughtTips = {};
+
+            const tasks = [
+                { title: "1. Vind de verborgen WiFi-netwerken", description: "Gebruik het volgende commando in de terminal:", command: "sudo iwlist wlan0 scan | grep -E 'SSID|Signal'", tips: ["Gebruik het commando correct", "Check je netwerkadapter"] },
+                { title: "2. Verbind met het verborgen WiFi-netwerk (DHCP)", description: "Gebruik de gevonden SSID en verbind handmatig.", tips: ["Zoek naar verborgen netwerken", "Zorg dat DHCP aanstaat"] },
+                { title: "3. Download en installeer SuperTuxKart", description: "Start de terminal op en installeer het spel.", tips: ["Gebruik sudo apt install", "Controleer internetverbinding"] },
+                { title: "4. Race tegen je klasgenoten!", description: "Veel succes! 🏎️" }
+            ];
+
+            function renderTasks() {
+                const taskContainer = document.getElementById("taskContainer");
+                taskContainer.innerHTML = "";
+
+                // Maak alleen de huidige opdracht zichtbaar
+                const task = tasks[currentTask];
+                const taskElement = document.createElement("div");
+                taskElement.className = "p-6 border border-gray-300 rounded-xl bg-white shadow-lg fade-in hover:shadow-xl transition-all duration-300";
+
+                taskElement.innerHTML = `
+                    <h3 class="text-2xl font-bold text-gray-800">${task.title}</h3>
+                    <p class="text-gray-700 mt-2">${task.description}</p>
+                    ${task.command ? `<pre class="bg-gray-900 text-white p-3 rounded-md mt-2 text-sm font-mono">${task.command}</pre>` : ""}
+                    <div class="mt-4 flex justify-between">
+                        ${task.tips ? renderTips(currentTask, task.tips) : ""}
+                        ${currentTask < tasks.length - 1 ? `<button onclick="nextTask()" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition">Voltooid</button>` : ""}
+                    </div>
+                `;
+                taskContainer.appendChild(taskElement);
+
+                // Update voortgangsbalk
+                document.getElementById("progressBar").style.width = `${((currentTask + 1) / tasks.length) * 100}%`;
+
+                // Start timers voor tips
+                if (task.tips) {
+                    task.tips.forEach((_, index) => {
+                        setTimeout(() => {
+                            if (!availableTips[currentTask]) availableTips[currentTask] = [];
+                            availableTips[currentTask].push(index);
+                            renderTasks();
+                        }, (index + 1) * 2 * 60 * 1000); // Eerste tip na 2 minuten, tweede tip na 4 minuten
+                    });
+                }
+            }
+
+            function renderTips(taskIndex, tips) {
+                return tips.map((tip, i) => `
+                    <div>
+                        <button onclick="buyTip(${taskIndex}, ${i})" 
+                            class="mt-2 px-4 py-2 text-white rounded-md transition ${
+                                (availableTips[taskIndex] && availableTips[taskIndex].includes(i))
+                                    ? 'bg-blue-500 hover:bg-blue-600'
+                                    : 'bg-gray-400 cursor-not-allowed'
+                            }"
+                            ${!(availableTips[taskIndex] && availableTips[taskIndex].includes(i)) ? "disabled" : ""}
+                        >
+                            Koop Tip ${i + 1} (10 punten)
+                        </button>
+                        <p id="tip-${taskIndex}-${i}" class="hidden mt-2 text-sm text-yellow-600">💡 ${tip}</p>
+                    </div>
+                `).join("");
+            }
+
+            window.buyTip = function(taskIndex, tipIndex) {
+                if (score >= 10 && (!boughtTips[taskIndex] || !boughtTips[taskIndex].includes(tipIndex))) {
+                    score -= 10;
+                    if (!boughtTips[taskIndex]) boughtTips[taskIndex] = [];
+                    boughtTips[taskIndex].push(tipIndex);
+                    document.getElementById(`tip-${taskIndex}-${tipIndex}`).classList.remove("hidden");
+                    updateScore();
+                    renderTasks();
+                }
+            };
+
+            window.nextTask = function () {
+                if (currentTask < tasks.length - 1) {
+                    currentTask++;
+                    renderTasks();
+                }
+            };
+
+            function updateScore() {
+                document.getElementById("scoreValue").textContent = score;
+            }
+
+            let elapsedTime = 0;
+            setInterval(() => {
+                elapsedTime++;
+                const minutes = Math.floor(elapsedTime / 60);
+                const seconds = elapsedTime % 60;
+                document.getElementById("timerContainer").innerHTML = `<p class="text-lg font-bold">Tijd verstreken: ${minutes} min ${seconds} sec</p>`;
+            }, 1000);
+
+            renderTasks();
+        });
+    </script>
+
+</body>
+</html>
