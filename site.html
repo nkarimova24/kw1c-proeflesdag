@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Pagina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-blue-950 relative">
+
+    <div class="bg-white p-6 rounded-lg shadow-md w-96">
+        <h2 class="text-xl font-semibold text-center mb-4">Welkom, log in</h2>
+        <form id="loginForm">
+            <div class="mb-3">
+                <label class="block text-gray-600">Gebruikersnaam</label>
+                <input type="text" id="username" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300" required>
+            </div>
+            <div class="mb-3">
+                <label class="block text-gray-600">Wachtwoord</label>
+                <input type="password" id="password" class="w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-800 text-white p-2 rounded-md hover:bg-blue-700 transition">
+                Inloggen
+            </button>
+        </form>
+        <p id="error" class="text-red-500 text-sm mt-2"></p>
+    </div>
+
+    <!-- Timer en Attempts secties -->
+    <div id="timerContainer" class="fixed top-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg"></div>
+    <div id="attemptsContainer" class="fixed bottom-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80 max-h-60 overflow-auto"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginForm = document.getElementById("loginForm");
+            const errorElement = document.getElementById("error");
+            const attemptsContainer = document.getElementById("attemptsContainer");
+            const timerContainer = document.getElementById("timerContainer");
+            let passwordAttempts = [];
+            let elapsedTime = 0;
+
+            // Login functionaliteit
+            loginForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+
+                passwordAttempts.push({ username, password });
+                updateAttempts();
+
+                if (username === "admin" && password === "supergeheim123") {
+                    window.location.href = "material.html"; // Navigeren naar volgende pagina
+                } else {
+                    errorElement.textContent = "Onjuiste inloggegevens";
+                }
+            });
+
+            // Timer functionaliteit
+            setInterval(() => {
+                elapsedTime++;
+                const minutes = Math.floor(elapsedTime / 60);
+                const seconds = elapsedTime % 60;
+                timerContainer.innerHTML = `<p class="text-lg font-bold">Tijd verstreken: ${minutes} min ${seconds} sec</p>`;
+            }, 1000);
+
+            // Tips laten zien na verloop van tijd
+            setTimeout(() => { showTip("💡 Tip: 'admin' is een standaard inlognaam."); }, 2 * 60 * 1000);
+            setTimeout(() => { showTip("💡 Tip: Gebruik F12 om de ontwikkelaarstools te openen."); }, 4 * 60 * 1000);
+            setTimeout(() => { showTip("💡 Tip: Bekijk de broncode van de pagina om te zien hoe je kunt inloggen."); }, 6 * 60 * 1000);
+
+            function showTip(message) {
+                const tipElement = document.createElement("p");
+                tipElement.textContent = message;
+                tipElement.className = "p-2 bg-yellow-500 text-black rounded-md mt-2";
+                timerContainer.appendChild(tipElement);
+            }
+
+            // Pogingen bijhouden
+            function updateAttempts() {
+                attemptsContainer.innerHTML = "<h3 class='text-lg font-bold mb-2'>Inlogpogingen</h3>";
+                if (passwordAttempts.length === 0) {
+                    attemptsContainer.innerHTML += "<p class='text-gray-400'>Nog geen pogingen</p>";
+                } else {
+                    passwordAttempts.forEach(attempt => {
+                        attemptsContainer.innerHTML += `<p class="border-b border-gray-600 py-1"><strong>${attempt.username}</strong>: ${attempt.password}</p>`;
+                    });
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
