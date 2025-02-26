@@ -41,6 +41,7 @@
             let currentTask = 0;
             let availableTips = {};
             let boughtTips = {};
+            let tipTimers = [];
 
             const tasks = [
                 {title: "1. Vind de verborgen WiFi-netwerken", description: "Je eerste taak is om te ontdekken welke verborgen WiFi-netwerken beschikbaar zijn.\n Gebruik het volgende commando in de terminal:", command: "sudo iwlist wlan0 scan | grep -E 'SSID|Signal'", tips: ["vul tip in", "vul tip in"]},
@@ -54,11 +55,11 @@
                 { title: "10. Race tegen je klasgenoten!", description: "Als alles goed is ingesteld, kunnen jullie nu tegen elkaar racen. Veel succes!"}
             ];
 
+           
             function renderTask() {
                 const taskContainer = document.getElementById("taskContainer");
                 taskContainer.innerHTML = "";
 
-                // Maak alleen de huidige opdracht zichtbaar
                 const task = tasks[currentTask];
                 const taskElement = document.createElement("div");
                 taskElement.className = "p-6 border border-gray-300 rounded-xl bg-white shadow-lg fade-in hover:shadow-xl transition-all duration-300";
@@ -74,15 +75,24 @@
                 `;
                 taskContainer.appendChild(taskElement);
 
-                // Update voortgangsbalk
                 document.getElementById("progressBar").style.width = `${((currentTask + 1) / tasks.length) * 100}%`;
 
-                // Render alleen de tips (voorkomt herladen)
-                renderTips(currentTask);
+                // ✅ **Voorkom het renderen van tips op de laatste opdracht**
+                if (currentTask !== tasks.length - 1 && tasks[currentTask].tips) {
+                    renderTips(currentTask);
+                }
+
+                // ✅ **Timers voor tips stoppen & alleen opnieuw starten als het GEEN laatste opdracht is**
+                stopTipTimers();
+                if (currentTask !== tasks.length - 1) {
+                    startTipTimers(currentTask);
+                }
             }
 
             function renderTips(taskIndex) {
                 const tipsContainer = document.getElementById("tipsContainer");
+                tipsContainer.innerHTML = "";
+
                 if (!tasks[taskIndex].tips) return;
 
                 tipsContainer.innerHTML = tasks[taskIndex].tips.map((tip, i) => `
@@ -100,6 +110,22 @@
                         <p id="tip-${taskIndex}-${i}" class="hidden mt-2 text-sm text-yellow-600">💡 ${tip}</p>
                     </div>
                 `).join("");
+            }
+
+            function startTipTimers(taskIndex) {
+                tasks[taskIndex].tips.forEach((_, tipIndex) => {
+                    const timer = setTimeout(() => {
+                        if (!availableTips[taskIndex]) availableTips[taskIndex] = [];
+                        availableTips[taskIndex].push(tipIndex);
+                        renderTips(taskIndex);
+                    }, (tipIndex + 1) * 2 * 60 * 1000);
+                    tipTimers.push(timer);
+                });
+            }
+
+            function stopTipTimers() {
+                tipTimers.forEach(clearTimeout);
+                tipTimers = [];
             }
 
             window.buyTip = function(taskIndex, tipIndex) {
@@ -130,19 +156,6 @@
                 const seconds = elapsedTime % 60;
                 document.getElementById("timerContainer").innerHTML = `<p class="text-lg font-bold">Tijd verstreken: ${minutes} min ${seconds} sec</p>`;
             }, 1000);
-
-            // Start timers voor tips
-            tasks.forEach((task, taskIndex) => {
-                if (task.tips) {
-                    task.tips.forEach((_, tipIndex) => {
-                        setTimeout(() => {
-                            if (!availableTips[taskIndex]) availableTips[taskIndex] = [];
-                            availableTips[taskIndex].push(tipIndex);
-                            renderTips(taskIndex); // Update alleen de tips zonder de opdracht opnieuw te laden
-                        }, (tipIndex + 1) * 2 * 60 * 1000);
-                    });
-                }
-            });
 
             renderTask();
         });

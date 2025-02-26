@@ -26,7 +26,6 @@
         <p id="error" class="text-red-500 text-sm mt-2"></p>
     </div>
 
-    <!-- Timer en Attempts secties -->
     <div id="timerContainer" class="fixed top-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg"></div>
     <div id="attemptsContainer" class="fixed bottom-4 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80 max-h-60 overflow-auto"></div>
 
@@ -49,13 +48,13 @@
                 updateAttempts();
 
                 if (username === "admin" && password === "supergeheim123") {
-                    window.location.href = "uitleg.html"; // Navigeren naar volgende pagina
+                    window.location.href = "uitleg.html"; 
                 } else {
                     errorElement.textContent = "Onjuiste inloggegevens";
                 }
             });
 
-            // Timer functionaliteit
+            // timer functie
             setInterval(() => {
                 elapsedTime++;
                 const minutes = Math.floor(elapsedTime / 60);
@@ -63,7 +62,7 @@
                 timerContainer.innerHTML = `<p class="text-lg font-bold">Tijd verstreken: ${minutes} min ${seconds} sec</p>`;
             }, 1000);
 
-            // Tips laten zien na verloop van tijd
+            // tips van timer
             setTimeout(() => { showTip("💡 Tip: 'admin' is een standaard inlognaam."); }, 2 * 60 * 1000);
             setTimeout(() => { showTip("💡 Tip: Gebruik F12 om de ontwikkelaarstools te openen."); }, 4 * 60 * 1000);
             setTimeout(() => { showTip("💡 Tip: Bekijk de broncode van de pagina om te zien hoe je kunt inloggen."); }, 6 * 60 * 1000);
@@ -75,7 +74,7 @@
                 timerContainer.appendChild(tipElement);
             }
 
-            // Pogingen bijhouden
+            // attempts function
             function updateAttempts() {
                 attemptsContainer.innerHTML = "<h3 class='text-lg font-bold mb-2'>Inlogpogingen</h3>";
                 if (passwordAttempts.length === 0) {
