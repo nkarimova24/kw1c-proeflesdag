@@ -49,7 +49,7 @@
                 { title: "4. Race tegen je klasgenoten!", description: "Veel succes! 🏎️" }
             ];
 
-            function renderTasks() {
+            function renderTask() {
                 const taskContainer = document.getElementById("taskContainer");
                 taskContainer.innerHTML = "";
 
@@ -63,8 +63,8 @@
                     <p class="text-gray-700 mt-2">${task.description}</p>
                     ${task.command ? `<pre class="bg-gray-900 text-white p-3 rounded-md mt-2 text-sm font-mono">${task.command}</pre>` : ""}
                     <div class="mt-4 flex justify-between">
-                        ${task.tips ? renderTips(currentTask, task.tips) : ""}
-                        ${currentTask < tasks.length - 1 ? `<button onclick="nextTask()" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition">Voltooid</button>` : ""}
+                        <div id="tipsContainer"></div>
+                        ${currentTask < tasks.length - 1 ? `<button onclick="nextTask()" class="mt-4 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition-all duration-300">Voltooid</button>` : ""}
                     </div>
                 `;
                 taskContainer.appendChild(taskElement);
@@ -72,23 +72,18 @@
                 // Update voortgangsbalk
                 document.getElementById("progressBar").style.width = `${((currentTask + 1) / tasks.length) * 100}%`;
 
-                // Start timers voor tips
-                if (task.tips) {
-                    task.tips.forEach((_, index) => {
-                        setTimeout(() => {
-                            if (!availableTips[currentTask]) availableTips[currentTask] = [];
-                            availableTips[currentTask].push(index);
-                            renderTasks();
-                        }, (index + 1) * 2 * 60 * 1000); // Eerste tip na 2 minuten, tweede tip na 4 minuten
-                    });
-                }
+                // Render alleen de tips (voorkomt herladen)
+                renderTips(currentTask);
             }
 
-            function renderTips(taskIndex, tips) {
-                return tips.map((tip, i) => `
+            function renderTips(taskIndex) {
+                const tipsContainer = document.getElementById("tipsContainer");
+                if (!tasks[taskIndex].tips) return;
+
+                tipsContainer.innerHTML = tasks[taskIndex].tips.map((tip, i) => `
                     <div>
                         <button onclick="buyTip(${taskIndex}, ${i})" 
-                            class="mt-2 px-4 py-2 text-white rounded-md transition ${
+                            class="mt-2 px-4 py-2 text-white font-semibold rounded-md shadow-md transition-all duration-300 ${
                                 (availableTips[taskIndex] && availableTips[taskIndex].includes(i))
                                     ? 'bg-blue-500 hover:bg-blue-600'
                                     : 'bg-gray-400 cursor-not-allowed'
@@ -109,14 +104,13 @@
                     boughtTips[taskIndex].push(tipIndex);
                     document.getElementById(`tip-${taskIndex}-${tipIndex}`).classList.remove("hidden");
                     updateScore();
-                    renderTasks();
                 }
             };
 
             window.nextTask = function () {
                 if (currentTask < tasks.length - 1) {
                     currentTask++;
-                    renderTasks();
+                    renderTask();
                 }
             };
 
@@ -132,7 +126,20 @@
                 document.getElementById("timerContainer").innerHTML = `<p class="text-lg font-bold">Tijd verstreken: ${minutes} min ${seconds} sec</p>`;
             }, 1000);
 
-            renderTasks();
+            // Start timers voor tips
+            tasks.forEach((task, taskIndex) => {
+                if (task.tips) {
+                    task.tips.forEach((_, tipIndex) => {
+                        setTimeout(() => {
+                            if (!availableTips[taskIndex]) availableTips[taskIndex] = [];
+                            availableTips[taskIndex].push(tipIndex);
+                            renderTips(taskIndex); // Update alleen de tips zonder de opdracht opnieuw te laden
+                        }, (tipIndex + 1) * 2 * 60 * 1000);
+                    });
+                }
+            });
+
+            renderTask();
         });
     </script>
 
