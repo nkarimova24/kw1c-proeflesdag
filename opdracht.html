@@ -17,12 +17,10 @@
 </head>
 <body class="flex flex-col items-center min-h-screen bg-blue-950 p-6">
 
-    <!-- Score -->
     <p id="scoreDisplay" class="text-center text-lg text-gray-600 font-semibold">
         Jouw score: <span id="scoreValue" class="text-green-600 font-bold">100</span> punten
     </p>
 
-    <!-- Vooruitgangsbalk -->
     <div class="w-full max-w-2xl mt-6 px-4">
         <div class="w-full bg-gray-300 rounded-full h-4">
             <div id="progressBar" class="bg-green-500 h-4 rounded-full transition-all duration-500" style="width: 0%;"></div>
@@ -44,7 +42,7 @@
             let tipTimers = [];
 
             const tasks = [
-                {title: "1. Vind de verborgen WiFi-netwerken", description: "Je eerste taak is om te ontdekken welke verborgen WiFi-netwerken beschikbaar zijn.\n Gebruik het volgende commando in de terminal:", command: "sudo iwlist wlan0 scan | grep -E 'SSID|Signal'", tips: ["vul tip in", "vul tip in"]},
+                {title:  "1. Vind de verborgen WiFi-netwerken", description: "Je eerste taak is om te ontdekken welke verborgen WiFi-netwerken beschikbaar zijn.\n Gebruik het volgende commando in de terminal:", command: "sudo iwlist wlan0 scan | grep -E 'SSID|Signal'", tips: ["vul tip in", "vul tip in"]},
                 { title: "2. Vind de verborgen WiFi-netwerken (DHCP)", description: "`Gebruik de gevonden SSID en verbind handmatig via de netwerkinstellingen van Ubuntu.\n Zorg ervoor dat DHCP is ingeschakeld, zodat je automatisch een IP-adres krijgt toegewezen", tips: ["vul tip in", "vul tip in"] },
                 { title: "4. Download en installeer SuperTuxKart", description: "Hiervoor start je de terminal op. Op de computer zit een sticker met het apparaat-ID, en de switch heeft een label met de netwerknaam. Gebruik deze informatie om de juiste instellingen in te vullen.", tips: ["vul tip in", "vul tip"] },
                 { title: "5. Verbreek je WiFi-verbinding en sluit de computer aan op de switch", description: "Gebruik een netwerkkabel om je computer te verbinden met de switch op tafel. Zorg ervoor dat je WiFi-verbinding is uitgeschakeld.  Op de computer zit een sticker met het apparaat-ID, en de switch heeft een label met de netwerknaam. Gebruik deze informatie om de juiste instellingen in te vullen." , tips: ["vul tip in", "vul tip in"] },
@@ -52,9 +50,10 @@
                 { title: "7. Configureer een statisch IP-adres", description: "Omdat je nu verbonden bent met de switch, moet je een statisch IP-adres instellen.", command: "Ga naar Netwerkinstellingen → Bedrade verbinding → Handmatig configureren.\n IP-adres: 192.168.1.X (kies een uniek nummer voor X, bijvoorbeeld 10)\n Subnetmasker: 255.255.255.0\n Gateway: 192.168.1.1", tips: ["vul tip in", "vul tip in"]},
                 { title: "8. Test je verbinding", description: "Open een terminal en test je verbinding met het volgende commando:\n Als je antwoord krijgt, is de verbinding succesvol.", command: "ping -c 4 192.168.1.1", tips: ["vul tip in", "vul tip in"]},
                 { title: "9. Start superTuxKart in de multiplayer-modus", description: "Start SuperTuxKart en ga naar multiplayer-instellingen.\n De eerste speler moet een lokaal netwerkspel hosten.\n De andere spelers kunnen zich aansluiten met het IP-adres van de host", tips: ["vul tip in", "vul tip in"]},
-                { title: "10. Race tegen je klasgenoten!", description: "Als alles goed is ingesteld, kunnen jullie nu tegen elkaar racen. Veel succes!"}
+                { title: "10. Race tegen je klasgenoten!", description: "Als alles goed is ingesteld, kunnen jullie nu tegen elkaar racen. Veel succes!"},
+                // {title: "", description: "", command: "", tips: ["", ""]}
             ];
-
+            
            
             function renderTask() {
                 const taskContainer = document.getElementById("taskContainer");
@@ -70,19 +69,18 @@
                     ${task.command ? `<pre class="bg-gray-900 text-white p-3 rounded-md mt-2 text-sm font-mono">${task.command}</pre>` : ""}
                     <div class="mt-4 flex justify-between">
                         <div id="tipsContainer"></div>
-                        ${currentTask < tasks.length - 1 ? `<button onclick="nextTask()" class="mt-4 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition-all duration-300">Voltooid</button>` : ""}
+                        ${currentTask < tasks.length - 1 ? `<button onclick="nextTask()" class="mt-12 px-6 py-2 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 transition-all duration-300">Voltooid</button>` : ""}
                     </div>
                 `;
                 taskContainer.appendChild(taskElement);
 
                 document.getElementById("progressBar").style.width = `${((currentTask + 1) / tasks.length) * 100}%`;
 
-                // ✅ **Voorkom het renderen van tips op de laatste opdracht**
+                // aankopen van tips bij laatste opdracht niet zichtbaar
                 if (currentTask !== tasks.length - 1 && tasks[currentTask].tips) {
                     renderTips(currentTask);
                 }
 
-                // ✅ **Timers voor tips stoppen & alleen opnieuw starten als het GEEN laatste opdracht is**
                 stopTipTimers();
                 if (currentTask !== tasks.length - 1) {
                     startTipTimers(currentTask);
