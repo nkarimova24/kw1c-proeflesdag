@@ -43,10 +43,15 @@
             let boughtTips = {};
 
             const tasks = [
-                { title: "1. Vind de verborgen WiFi-netwerken", description: "Gebruik het volgende commando in de terminal:", command: "sudo iwlist wlan0 scan | grep -E 'SSID|Signal'", tips: ["Gebruik het commando correct", "Check je netwerkadapter"] },
-                { title: "2. Verbind met het verborgen WiFi-netwerk (DHCP)", description: "Gebruik de gevonden SSID en verbind handmatig.", tips: ["Zoek naar verborgen netwerken", "Zorg dat DHCP aanstaat"] },
-                { title: "3. Download en installeer SuperTuxKart", description: "Start de terminal op en installeer het spel.", tips: ["Gebruik sudo apt install", "Controleer internetverbinding"] },
-                { title: "4. Race tegen je klasgenoten!", description: "Veel succes! 🏎️" }
+                {title: "1. Vind de verborgen WiFi-netwerken", description: "Je eerste taak is om te ontdekken welke verborgen WiFi-netwerken beschikbaar zijn.\n Gebruik het volgende commando in de terminal:", command: "sudo iwlist wlan0 scan | grep -E 'SSID|Signal'", tips: ["vul tip in", "vul tip in"]},
+                { title: "2. Vind de verborgen WiFi-netwerken (DHCP)", description: "`Gebruik de gevonden SSID en verbind handmatig via de netwerkinstellingen van Ubuntu.\n Zorg ervoor dat DHCP is ingeschakeld, zodat je automatisch een IP-adres krijgt toegewezen", tips: ["vul tip in", "vul tip in"] },
+                { title: "4. Download en installeer SuperTuxKart", description: "Hiervoor start je de terminal op. Op de computer zit een sticker met het apparaat-ID, en de switch heeft een label met de netwerknaam. Gebruik deze informatie om de juiste instellingen in te vullen.", tips: ["vul tip in", "vul tip"] },
+                { title: "5. Verbreek je WiFi-verbinding en sluit de computer aan op de switch", description: "Gebruik een netwerkkabel om je computer te verbinden met de switch op tafel. Zorg ervoor dat je WiFi-verbinding is uitgeschakeld.  Op de computer zit een sticker met het apparaat-ID, en de switch heeft een label met de netwerknaam. Gebruik deze informatie om de juiste instellingen in te vullen." , tips: ["vul tip in", "vul tip in"] },
+                { title: "6. Wat is een IP-adres en hoe werkt een subnetmask?", description: "Een IP-adres is een uniek nummer dat een apparaat in een netwerk identificeert. Dit adres bestaat uit vier nummers gescheiden door punten (bijv. 192.168.1.10).\n\ Het subnetmask bepaalt welke IP-adressen tot hetzelfde netwerk behoren.", tips: ["vul tip in", "vul tip in"]},
+                { title: "7. Configureer een statisch IP-adres", description: "Omdat je nu verbonden bent met de switch, moet je een statisch IP-adres instellen.", command: "Ga naar Netwerkinstellingen → Bedrade verbinding → Handmatig configureren.\n IP-adres: 192.168.1.X (kies een uniek nummer voor X, bijvoorbeeld 10)\n Subnetmasker: 255.255.255.0\n Gateway: 192.168.1.1", tips: ["vul tip in", "vul tip in"]},
+                { title: "8. Test je verbinding", description: "Open een terminal en test je verbinding met het volgende commando:\n Als je antwoord krijgt, is de verbinding succesvol.", command: "ping -c 4 192.168.1.1", tips: ["vul tip in", "vul tip in"]},
+                { title: "9. Start superTuxKart in de multiplayer-modus", description: "Start SuperTuxKart en ga naar multiplayer-instellingen.\n De eerste speler moet een lokaal netwerkspel hosten.\n De andere spelers kunnen zich aansluiten met het IP-adres van de host", tips: ["vul tip in", "vul tip in"]},
+                { title: "10. Race tegen je klasgenoten!", description: "Als alles goed is ingesteld, kunnen jullie nu tegen elkaar racen. Veel succes!"}
             ];
 
             function renderTask() {
